@@ -1,19 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
- @b526242561
- Watch 490
-  Star 6,370
-  Fork 3,696 douglascrockford/JSON-js
- Code  Issues 4  Pull requests 3  Projects 0  Pulse  Graphs
-Branch: master Find file Copy pathJSON-js/json2.js
-107fc93  on 11 May
-@douglascrockford douglascrockford "
-1 contributor
-RawBlameHistory     507 lines (400 sloc)  18 KB
 //  json2.js
 //  2016-05-01
 //  Public Domain.
@@ -520,5 +504,3 @@ if (typeof JSON !== "object") {
         };
     }
 }());
-Contact GitHub API Training Shop Blog About
-© 2016 GitHub, Inc. Terms Privacy Security Status Help

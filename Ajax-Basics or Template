@@ -1,0 +1,86 @@
+/**
+ * Created by Administrator on 2016/9/18.
+ */
+// 创建对象
+// IE7+和其他浏览器都支持
+// 现代浏览器支持xhr level 2，支持情况参考相关资料
+// xhr leve12兼容xhr1并新增；
+// 1.timeout支持
+// 2.CORS 跨域支持
+// 3.upload文件上传支持
+function createXHR(){
+    return new XMLHttpRequest();
+}
+
+// 创建对象，兼容版
+// IE6+ Msxm12.XMLHTTP
+// <IE6 Microsoft.XMLHTTP
+function createXHR2(){
+    var xhr = null;
+    if(window.XMLHttpRequest){
+        xhr = new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+        try{
+            xhr = new ActiveXObject("Msxm12.XMLHTTP");
+        }catch (e){
+            try{
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }catch (e){}
+        }
+    }
+    return xhr;
+}
+
+function testCreatexhr(){
+// 1.创建XMLHttpRequest对象
+   var xhr = createXHR2();
+
+// 2.Open操作初始化请求信息,这里要注意是get还是post请求，一般get用来查询，post用来修改或添加
+    //注意：一般情况下，如果发送的是GET请求，那么所输入的参数是放在请求地址后面的，然后直接执行不带任何参数的send（）
+    //注意：如果是POST请求，并且希望把查询参数放在body里面，那么参数写在send（）里面
+    xhr.open("GET","这里输入请求地址url",true);//这里的true表示异步，false表示同步
+
+// 3.一般默认发送数据形式为urlencoded，如果要使用json字符串的形式发送，那么使用setRequestHeader()方法设置一个请求头即可
+    xhr.setRequestHeader("Content-Type","application/json");
+    //json send,注意：如果浏览器不支持JSON.stringify这个对象，可以考虑引入json2.js这个库解决
+    //也可以自定义头，text表示名称，value表示值，如下：
+    xhr.setRequestHeader("text","value");
+
+// 4.监听事件处理响应结果
+    xhr.onreadystatechange = function(){
+        // readState 5种状态
+        // 0：未初始化
+        // 1.连接建立，请求发出
+        // 2.服务器返回响应
+        // 3.交互（处理响应数据）
+        // 4.完成，数据可交付客户端使用
+        if(xhr.readyState ==4&& xhr.status ==200){
+            console.log(xhr.responseText);
+            //将JSON字符串转化为JSON对象
+            JSON.parse(xhr.responseText);
+            //如果浏览器没有内置JSON对象
+            eval(xhr.responseText);
+            console.log(xhr.getAllResponseHeaders()); //getAllResponseHeaders(）获取所有的响应头
+            console.log(xhr.getResponseHeader("Contant-Type"));//getResponseHeader()获取名称为Contant-Type的头
+            console.log(xhr.status());//status()获取响应状态
+            console.log(xhr.statusText());//statusText()获取响应状态文本
+        }
+    }
+    //仅浏览器支持 level 2,不过还是建议使用传统的onreadystatechange方法
+    xhr.onload =function(){
+        if(xhr.status ==200){}
+    }
+
+// 5.超时设置，timeout仅在level 2上可以使用
+    xhr.timeout = 5000;
+    //如果超时，执行ontimeout事件
+    xhr.ontimeout = function(){
+        console.log("timeout!");
+    }
+
+    xhr.send(JSON.stringify({
+        //这里将信息以JSON形式书写
+        keyword: "abc",
+        other: "tesst"
+    }));
+}
